@@ -3,10 +3,8 @@ package edu.miracosta.cs113;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Display extends JFrame {
 
@@ -22,17 +20,19 @@ public class Display extends JFrame {
          * FOR WRITING PURPOSES ONLY
          */
         /*try {
-            ObjectOutputStream outputStream =
-                    new ObjectOutputStream(
-                            new FileOutputStream("english.dat")
-                    );
-            outputStream.writeUTF("High scores:");
-            outputStream.writeUTF("Check");
+            Writer outputStream = new BufferedWriter(
+                    new OutputStreamWriter(
+                    new FileOutputStream("spanish.dat")
+            , StandardCharsets.UTF_8));
+            outputStream.write("Puntuaci\u00f3n M\u00e1s Alta:\r\n");
+            outputStream.write("Comprobar\r\n");
+            outputStream.write("Nuevo Juego\r\n");
             outputStream.close();
         } catch(IOException e) {
             System.out.println("File not found.");
             System.exit(0);
         }*/
+
 
         // Change the Icon for the program
         try {

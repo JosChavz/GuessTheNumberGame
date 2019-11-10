@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class StartingMenu extends JPanel implements ActionListener {
@@ -76,18 +77,15 @@ public class StartingMenu extends JPanel implements ActionListener {
             else if (encodedString.equals(encode("Español"))) languageFile = "spanish.dat";
             else if (encodedString.equals(encode("日本語"))) languageFile = "japanese.dat";
 
-            ObjectInputStream inputStream = new ObjectInputStream(
-                    new FileInputStream(languageFile)
+            BufferedReader inputStream = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(languageFile), StandardCharsets.UTF_8)
             );
 
-            try {
-                while(true) {
-                    languageData.add(inputStream.readUTF());
-                    String tester = inputStream.readUTF();
-                    System.out.println(tester);
-                }
-            } catch (EOFException e) {
-                System.out.println("No more strings");
+            String str;
+
+            while( ( str = inputStream.readLine() ) != null ) {
+                languageData.add(str);
             }
 
             inputStream.close();
@@ -104,13 +102,8 @@ public class StartingMenu extends JPanel implements ActionListener {
         Display.nextSlide();
     }
 
-    private static String encode(String s) {
-        try {
-            s = new String(s.getBytes(), "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
-            System.out.println("COULD NOT ENCODE");
-        } // Encodes to display
+    public static String encode(String s) {
+        s = new String(s.getBytes(), StandardCharsets.UTF_8);
 
         return s;
     }
