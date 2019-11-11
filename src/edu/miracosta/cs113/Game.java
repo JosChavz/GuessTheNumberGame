@@ -17,28 +17,36 @@ import java.util.Scanner;
 public class Game  extends JPanel implements ActionListener {
 
     private AssistantJack brain = new AssistantJack(3);
-    private JPanel comboBoxes;
-    private JComboBox firstResponse;
-    private JComboBox secondResponse;
-    private JComboBox thirdResponse;
+    private JPanel comboBoxesWrapper;
+    private JComboBox[] boxChoices;
+    private ArrayList<String>[] currentArrays;
     private JPanel submit;
-    private ArrayList<String> firstArray;
-    private ArrayList<String> secondArray;
-    private ArrayList<String> thirdArray;
     private boolean gameComplete;
     private String[] highScores;
     private int index = 0;
     private ArrayList<String> languageFile;
+    private String[] responses;
+    private JPanel gameCover;
+
+    private void newGame() {
+        if(gameCover != null ) remove(gameCover);
+
+        gameCover = new JPanel(new BorderLayout());
+
+        // Initializing arrays
+        currentArrays = new ArrayList[3];
+        boxChoices = new JComboBox[3];
+
+    }
 
     public Game(ArrayList<String> languageFile) {
         // Setting size of the window
         setSize(WIDTH, HEIGHT);
 
-        // Creating the first border layout
-        setLayout(new BorderLayout());
-
         // Assigning the ArrayList global to the class
         this.languageFile = languageFile;
+
+        newGame();
 
         // High score text
         JPanel highScorePanel = new JPanel(new GridBagLayout());
@@ -73,28 +81,30 @@ public class Game  extends JPanel implements ActionListener {
         add(highScorePanel, BorderLayout.NORTH);
 
         // Number Creation for Combo Boxes
-        firstArray = numberArray(6);
-        secondArray = numberArray(10);
-        thirdArray = numberArray(6);
+        currentArrays[0] = numberArray(6);
+        currentArrays[1] = numberArray(10);
+        currentArrays[2] = numberArray(6);
 
         // Combo Box for Number Guessing
-        firstResponse = new JComboBox(firstArray.toArray());
-        secondResponse = new JComboBox(secondArray.toArray());
-        thirdResponse = new JComboBox(thirdArray.toArray());
+        for(int i = 0; i < currentArrays.length; i++) {
+            boxChoices[i] = new JComboBox( currentArrays[i].toArray() );
+        }
 
         // JPanel for Combination Box
-        comboBoxes = new JPanel(new GridBagLayout());
+        comboBoxesWrapper = new JPanel(new GridBagLayout());
         GridBagConstraints comboBoxEditor = new GridBagConstraints();
         comboBoxEditor.insets = new Insets(0, 15, 0, 15);
-        comboBoxes.add(firstResponse, comboBoxEditor);
-        comboBoxes.add(secondResponse, comboBoxEditor);
-        comboBoxes.add(thirdResponse, comboBoxEditor);
 
-        add(comboBoxes, BorderLayout.CENTER);
+        // Adding in the JComboBox
+        for (JComboBox boxChoice : boxChoices) {
+            comboBoxesWrapper.add(boxChoice, comboBoxEditor);
+        }
+
+        add(comboBoxesWrapper, BorderLayout.CENTER);
 
         // Check Button
         JButton submitButton = new JButton(languageFile.get(index++));
-        submitButton.addActionListener(this::actionPerformed);
+        submitButton.addActionListener(this);
         double buttonSize = submitButton.getPreferredSize().getHeight() + 20; // padding of 10 pixels
 
         submit = new JPanel();
@@ -115,66 +125,61 @@ public class Game  extends JPanel implements ActionListener {
         return stringArray;
     }
 
-    private void updateBoxes(int wrongAnswer, String clickedResponse) {
-        remove(comboBoxes);
+    private void displayPlayAgain() {
+        // Removes button container from JPanel
+        remove(submit);
 
-        comboBoxes = new JPanel(new GridBagLayout());
+        JButton playAgainButton = new JButton(languageFile.get(index));
+        //playAgainButton.addActionListener(this::actionPerformed);
+        double buttonSize = playAgainButton.getPreferredSize().getHeight() + 20; // padding of 10 pixels
+
+        submit = new JPanel(new GridBagLayout());
+        submit.setBackground(Color.darkGray);
+        submit.setPreferredSize(new Dimension(10, (int) buttonSize));
+        submit.add(playAgainButton, new GridBagConstraints()); // GridBagConstraints makes the button centered
+        add(submit, BorderLayout.SOUTH);
+
+        // Redo the canvas
+        validate();
+        repaint();
+    }
+
+    private void updateBoxes() {
+        remove(comboBoxesWrapper);
+
+        comboBoxesWrapper = new JPanel(new GridBagLayout());
         GridBagConstraints comboBoxEditor = new GridBagConstraints();
         comboBoxEditor.insets = new Insets(0, 15, 0, 15);
 
-        switch (wrongAnswer) {
-            case 1:
-                firstArray.remove(clickedResponse);
-                break;
-            case 2:
-                secondArray.remove(clickedResponse);
-                break;
-            case 3:
-                thirdArray.remove(clickedResponse);
-                break;
+        for(int i = 0; i < boxChoices.length; i++) {
+            boxChoices[i] = new JComboBox( currentArrays[i].toArray() );
+            comboBoxesWrapper.add(boxChoices[i], comboBoxEditor);
         }
 
-        firstResponse = new JComboBox(firstArray.toArray());
-        secondResponse = new JComboBox(secondArray.toArray());
-        thirdResponse = new JComboBox(thirdArray.toArray());
-        comboBoxes.add(firstResponse, comboBoxEditor);
-        comboBoxes.add(secondResponse, comboBoxEditor);
-        comboBoxes.add(thirdResponse, comboBoxEditor);
-
-        add(comboBoxes, BorderLayout.CENTER);
+        add(comboBoxesWrapper, BorderLayout.CENTER);
         validate();
         repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String[] responses = {
-                (String)firstResponse.getSelectedItem(),
-                (String)secondResponse.getSelectedItem(),
-                (String)thirdResponse.getSelectedItem()
-        };
+
+        int tempFirstResponse = Integer.parseInt((String) boxChoices[0].getSelectedItem());
+        int tempSecondResponse = Integer.parseInt((String) boxChoices[1].getSelectedItem());
+        int tempThirdResponse = Integer.parseInt((String) boxChoices[2].getSelectedItem());
+
         int wrongAnswer = (!gameComplete)? brain.checkAnswer(
-                Integer.parseInt(responses[0]),
-                Integer.parseInt(responses[1]),
-                Integer.parseInt(responses[2])
+                tempFirstResponse,
+                tempSecondResponse,
+                tempThirdResponse
         ): 0;
 
-
-
-        if(wrongAnswer == 0) {
-            // Removes button container from JPanel
-            remove(submit);
-
-            JButton playAgainButton = new JButton(languageFile.get(index));
-            //playAgainButton.addActionListener(this::actionPerformed);
-            double buttonSize = playAgainButton.getPreferredSize().getHeight() + 20; // padding of 10 pixels
-
-            submit = new JPanel(new GridBagLayout());
-            submit.setBackground(Color.darkGray);
-            submit.setPreferredSize(new Dimension(10, (int) buttonSize));
-            submit.add(playAgainButton, new GridBagConstraints()); // GridBagConstraints makes the button centered
-            add(submit, BorderLayout.SOUTH);
+        if(wrongAnswer != 0) {
+            currentArrays[wrongAnswer - 1].remove(boxChoices[wrongAnswer - 1].getSelectedIndex());
+            updateBoxes();
         }
-        else updateBoxes(wrongAnswer, responses[wrongAnswer - 1]);
+        else {
+            displayPlayAgain();
+        }
     }
 }

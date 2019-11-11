@@ -16,24 +16,6 @@ public class Display extends JFrame {
 
         Display window = new Display();
 
-        /**
-         * FOR WRITING PURPOSES ONLY
-         */
-        /*try {
-            Writer outputStream = new BufferedWriter(
-                    new OutputStreamWriter(
-                    new FileOutputStream("spanish.dat")
-            , StandardCharsets.UTF_8));
-            outputStream.write("Puntuaci\u00f3n M\u00e1s Alta:\r\n");
-            outputStream.write("Comprobar\r\n");
-            outputStream.write("Nuevo Juego\r\n");
-            outputStream.close();
-        } catch(IOException e) {
-            System.out.println("File not found.");
-            System.exit(0);
-        }*/
-
-
         // Change the Icon for the program
         try {
             window.setIconImage(ImageIO.read(new File("src/edu/miracosta/cs113/logo.png")));
