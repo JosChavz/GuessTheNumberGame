@@ -21,11 +21,9 @@ public class Game  extends JPanel implements ActionListener {
     private JComboBox[] boxChoices;
     private ArrayList<String>[] currentArrays;
     private JPanel submit;
-    private boolean gameComplete;
     private String[] highScores;
     private int index = 0;
     private ArrayList<String> languageFile;
-    private String[] responses;
     private JPanel gameCover;
 
     private void newGame() {
@@ -36,17 +34,6 @@ public class Game  extends JPanel implements ActionListener {
         // Initializing arrays
         currentArrays = new ArrayList[3];
         boxChoices = new JComboBox[3];
-
-    }
-
-    public Game(ArrayList<String> languageFile) {
-        // Setting size of the window
-        setSize(WIDTH, HEIGHT);
-
-        // Assigning the ArrayList global to the class
-        this.languageFile = languageFile;
-
-        newGame();
 
         // High score text
         JPanel highScorePanel = new JPanel(new GridBagLayout());
@@ -113,6 +100,23 @@ public class Game  extends JPanel implements ActionListener {
         submit.setPreferredSize(new Dimension(10, (int) buttonSize));
         submit.add(submitButton, new GridBagConstraints()); // GridBagConstraints makes the button centered
         add(submit, BorderLayout.SOUTH);
+
+        // Redo the canvas
+        validate();
+        repaint();
+    }
+
+    public Game(ArrayList<String> languageFile) {
+        // Setting size of the window
+        setSize(WIDTH, HEIGHT);
+
+        // Setting layout
+        setLayout(new BorderLayout());
+
+        // Assigning the ArrayList global to the class
+        this.languageFile = languageFile;
+
+        newGame();
     }
 
     private static ArrayList<String> numberArray(int number) {
@@ -130,7 +134,13 @@ public class Game  extends JPanel implements ActionListener {
         remove(submit);
 
         JButton playAgainButton = new JButton(languageFile.get(index));
-        //playAgainButton.addActionListener(this::actionPerformed);
+        playAgainButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                index = 0;
+                newGame();
+            }
+        });
         double buttonSize = playAgainButton.getPreferredSize().getHeight() + 20; // padding of 10 pixels
 
         submit = new JPanel(new GridBagLayout());
@@ -168,11 +178,11 @@ public class Game  extends JPanel implements ActionListener {
         int tempSecondResponse = Integer.parseInt((String) boxChoices[1].getSelectedItem());
         int tempThirdResponse = Integer.parseInt((String) boxChoices[2].getSelectedItem());
 
-        int wrongAnswer = (!gameComplete)? brain.checkAnswer(
+        int wrongAnswer = brain.checkAnswer(
                 tempFirstResponse,
                 tempSecondResponse,
                 tempThirdResponse
-        ): 0;
+        );
 
         if(wrongAnswer != 0) {
             currentArrays[wrongAnswer - 1].remove(boxChoices[wrongAnswer - 1].getSelectedIndex());
