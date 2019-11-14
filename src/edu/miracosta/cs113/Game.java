@@ -11,17 +11,44 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game  extends JPanel implements ActionListener {
+
+    private class Player implements Serializable, Comparable {
+        private String name;
+        private int score;
+
+        private Player (String name, int score) {
+            this.name = name;
+            this.score = score;
+        }
+
+        @Override
+        public String toString() {
+            return this.name + " - " + this.score;
+        }
+
+        public int compareTo() {
+
+            return 0;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            return 0;
+        }
+    }
 
     private AssistantJack brain = new AssistantJack(3);
     private JPanel comboBoxesWrapper;
     private JComboBox[] boxChoices;
     private ArrayList<String>[] currentArrays;
     private JPanel submit;
-    private String[] highScores;
+    private Player[] highScores;
     private int index = 0;
     private ArrayList<String> languageFile;
     private JPanel gameCover;
@@ -30,6 +57,7 @@ public class Game  extends JPanel implements ActionListener {
         if(gameCover != null ) remove(gameCover);
 
         gameCover = new JPanel(new BorderLayout());
+        gameCover.setPreferredSize(new Dimension(600, 300));
 
         // Initializing arrays
         currentArrays = new ArrayList[3];
@@ -45,27 +73,32 @@ public class Game  extends JPanel implements ActionListener {
 
         // Checks the people with high scores
         try {
-            File file = new File("src\\edu\\miracosta\\cs113\\highscore.txt");
+            FileReader file = new FileReader("highscore.txt");
+            System.out.println("found");
             Scanner sc = new Scanner(file);
 
-            highScores = new String[3];
+            highScores = new Player[3];
             int x = 0;
             while(sc.hasNext()) {
-                highScores[x++] = sc.nextLine();
+                /**
+                 * TO DO: FILE OUGHT TO BE IN BYTES AND YOU KNOW
+                 */
+                //highScores[x++] = sc.nextLine();
+                System.out.println(highScores[x - 1]);
             }
         } catch (FileNotFoundException e) {
-            highScores = new String[]{"[Empty]", "[Empty]", "[Empty]"};
+            //highScores = new String[]{"[Empty]", "[Empty]", "[Empty]"};
         }
 
         // Editing GridBag to fit current high score needs
-        editor.insets = new Insets(5, 3, 5, 3);
+        editor.insets = new Insets(5, 16, 5, 16);
         editor.gridy = 1;
         for(int i = 0; i < highScores.length; i++) { // Doesn't want to add in to the actual Frame
             JLabel temp = new JLabel((i + 1) + ": " + highScores[i]);
             editor.gridx = i;
             highScorePanel.add(temp, editor);
         }
-        add(highScorePanel, BorderLayout.NORTH);
+        gameCover.add(highScorePanel, BorderLayout.NORTH);
 
         // Number Creation for Combo Boxes
         currentArrays[0] = numberArray(6);
@@ -87,7 +120,7 @@ public class Game  extends JPanel implements ActionListener {
             comboBoxesWrapper.add(boxChoice, comboBoxEditor);
         }
 
-        add(comboBoxesWrapper, BorderLayout.CENTER);
+        gameCover.add(comboBoxesWrapper, BorderLayout.CENTER);
 
         // Check Button
         JButton submitButton = new JButton(languageFile.get(index++));
@@ -99,7 +132,10 @@ public class Game  extends JPanel implements ActionListener {
         submit.setLayout(new GridBagLayout());
         submit.setPreferredSize(new Dimension(10, (int) buttonSize));
         submit.add(submitButton, new GridBagConstraints()); // GridBagConstraints makes the button centered
-        add(submit, BorderLayout.SOUTH);
+        gameCover.add(submit, BorderLayout.SOUTH);
+
+        // Adds gameCover to super
+        add(gameCover);
 
         // Redo the canvas
         validate();
@@ -111,7 +147,7 @@ public class Game  extends JPanel implements ActionListener {
         setSize(WIDTH, HEIGHT);
 
         // Setting layout
-        setLayout(new BorderLayout());
+        //setLayout(new BorderLayout());
 
         // Assigning the ArrayList global to the class
         this.languageFile = languageFile;
@@ -131,7 +167,7 @@ public class Game  extends JPanel implements ActionListener {
 
     private void displayPlayAgain() {
         // Removes button container from JPanel
-        remove(submit);
+        gameCover.remove(submit);
 
         JButton playAgainButton = new JButton(languageFile.get(index));
         playAgainButton.addActionListener(new AbstractAction() {
@@ -147,7 +183,7 @@ public class Game  extends JPanel implements ActionListener {
         submit.setBackground(Color.darkGray);
         submit.setPreferredSize(new Dimension(10, (int) buttonSize));
         submit.add(playAgainButton, new GridBagConstraints()); // GridBagConstraints makes the button centered
-        add(submit, BorderLayout.SOUTH);
+        gameCover.add(submit, BorderLayout.SOUTH);
 
         // Redo the canvas
         validate();
@@ -155,7 +191,7 @@ public class Game  extends JPanel implements ActionListener {
     }
 
     private void updateBoxes() {
-        remove(comboBoxesWrapper);
+        gameCover.remove(comboBoxesWrapper);
 
         comboBoxesWrapper = new JPanel(new GridBagLayout());
         GridBagConstraints comboBoxEditor = new GridBagConstraints();
@@ -166,7 +202,7 @@ public class Game  extends JPanel implements ActionListener {
             comboBoxesWrapper.add(boxChoices[i], comboBoxEditor);
         }
 
-        add(comboBoxesWrapper, BorderLayout.CENTER);
+        gameCover.add(comboBoxesWrapper, BorderLayout.CENTER);
         validate();
         repaint();
     }
