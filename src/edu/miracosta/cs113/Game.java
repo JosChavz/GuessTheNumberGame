@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Game  extends JPanel implements ActionListener {
@@ -32,28 +33,26 @@ public class Game  extends JPanel implements ActionListener {
             return this.name + " - " + this.score;
         }
 
-        public int compareTo() {
-
-            return 0;
-        }
-
         @Override
         public int compareTo(Object o) {
+
             return 0;
         }
     }
 
-    private AssistantJack brain = new AssistantJack(3);
+    private AssistantJack brain;
     private JPanel comboBoxesWrapper;
     private JComboBox[] boxChoices;
     private ArrayList<String>[] currentArrays;
     private JPanel submit;
-    private Player[] highScores;
+    private LinkedList<Player> highScores;
     private int index = 0;
     private ArrayList<String> languageFile;
     private JPanel gameCover;
 
     private void newGame() {
+        // Creates a whole new set of answers
+        brain = new AssistantJack(3);
         if(gameCover != null ) remove(gameCover);
 
         gameCover = new JPanel(new BorderLayout());
@@ -71,33 +70,35 @@ public class Game  extends JPanel implements ActionListener {
         JLabel highScoreText = new JLabel(languageFile.get(index++));
         highScorePanel.add(highScoreText, editor);
 
-        // Checks the people with high scores
-        try {
-            FileReader file = new FileReader("highscore.txt");
-            System.out.println("found");
-            Scanner sc = new Scanner(file);
-
-            highScores = new Player[3];
-            int x = 0;
-            while(sc.hasNext()) {
-                /**
-                 * TO DO: FILE OUGHT TO BE IN BYTES AND YOU KNOW
-                 */
-                //highScores[x++] = sc.nextLine();
-                System.out.println(highScores[x - 1]);
-            }
-        } catch (FileNotFoundException e) {
-            //highScores = new String[]{"[Empty]", "[Empty]", "[Empty]"};
-        }
-
         // Editing GridBag to fit current high score needs
         editor.insets = new Insets(5, 16, 5, 16);
         editor.gridy = 1;
-        for(int i = 0; i < highScores.length; i++) { // Doesn't want to add in to the actual Frame
-            JLabel temp = new JLabel((i + 1) + ": " + highScores[i]);
-            editor.gridx = i;
-            highScorePanel.add(temp, editor);
+
+        // Checks the people with high scores
+        try {
+            FileReader file = new FileReader("highscore.dat");
+            System.out.println("found");
+            Scanner sc = new Scanner(file);
+
+            highScores = new LinkedList<>();
+            int x = 0;
+            while(sc.hasNext()) {
+                //highScores[x++] = sc.nextLine();
+                System.out.println(highScores.get(x - 1));
+            }
         }
+        catch (FileNotFoundException ignored) { }
+        finally {
+            for(int i = 0; i < 3; i++) { // Doesn't want to add in to the actual Frame
+                JLabel temp = new JLabel((i + 1) + ": " +
+                        ((highScores == null || i < highScores.size())? "[Empty]": highScores.get(i).toString()) );
+                editor.gridx = i;
+                highScorePanel.add(temp, editor);
+            }
+        }
+
+
+        // Adds high score panel to the screen
         gameCover.add(highScorePanel, BorderLayout.NORTH);
 
         // Number Creation for Combo Boxes
@@ -145,9 +146,6 @@ public class Game  extends JPanel implements ActionListener {
     public Game(ArrayList<String> languageFile) {
         // Setting size of the window
         setSize(WIDTH, HEIGHT);
-
-        // Setting layout
-        //setLayout(new BorderLayout());
 
         // Assigning the ArrayList global to the class
         this.languageFile = languageFile;
@@ -225,6 +223,12 @@ public class Game  extends JPanel implements ActionListener {
             updateBoxes();
         }
         else {
+            Player tempPlayer = new Player("", brain.getTimesAsked());
+            if(highScores != null) {
+                for(int i = highScores.size() - 1; i >= 0; i--) {
+                    int compareInt = highScores.get(i).compareTo(tempPlayer);
+                }
+            }
             displayPlayAgain();
         }
     }
