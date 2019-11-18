@@ -13,6 +13,18 @@ public class Display extends JFrame {
     static JPanel startingMenu = new StartingMenu();
 
     public static void main(String[] args) {
+        /** FOR TESTING PURPOSES */
+        /*try {
+            FileOutputStream file = new FileOutputStream("highscores.dat");
+            Data fileWriter = new ObjectOutputStream(file);
+            fileWriter.writeObject(new Game.Player("Robert", 50));
+            fileWriter.writeObject(new Game.Player("Charles", 10));
+            fileWriter.writeObject(new Game.Player("Even", 5));
+        }
+        catch(Exception e) {
+            System.out.println("Error!");
+            System.exit(0);
+        }*/
 
         Display window = new Display();
 
