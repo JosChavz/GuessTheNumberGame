@@ -32,7 +32,15 @@ public class Game extends JPanel implements ActionListener {
 
         @Override
         public int compareTo(Object o) {
+            // In the case that o is not a Player
+            if( !(o instanceof Player) ) throw new ClassCastException();
 
+            // This object's score is greater than o's score.
+            if( this.score > ((Player) o).score) return 1;
+            // This object's score is less than o's score.
+            else if( this.score < ((Player) o).score ) return -1;
+
+            // Both scores are the same
             return 0;
         }
     }
@@ -198,7 +206,7 @@ public class Game extends JPanel implements ActionListener {
                 // Checks to see if the tempPlayer is null
                 if(tempPlayer == null) continue;
                 // Adds in if it wasn't null
-                highScoreAdd(tempPlayer);
+                highScores.add(tempPlayer);
             }
             while( tempPlayer != null );
         }
@@ -215,25 +223,6 @@ public class Game extends JPanel implements ActionListener {
 
         // Adds high score panel to the screen
         gameCover.add(highScorePanel, BorderLayout.NORTH);
-    }
-
-    public void highScoreAdd(Player tempPlayer) {
-        if(highScores == null) highScores.add(tempPlayer);
-
-        for(int i = 0; i < highScores.size(); i++) {
-            switch( highScores.get(i).compareTo(tempPlayer) ) {
-                case -1: // tempPlayer comes before i
-                    if(i == 0) highScores.addFirst(tempPlayer);
-
-                    break;
-                case 0: // tempPlayer has the same high score as i
-                    if(i == 0) highScores.add(i + 1, tempPlayer);
-                    break;
-                case 1: // tempPlayer comes after i
-                    if (i == highScores.size() - 1) highScores.addLast(tempPlayer);
-                    break;
-            }
-        }
     }
 
     @Override
@@ -254,13 +243,38 @@ public class Game extends JPanel implements ActionListener {
             updateBoxes();
         }
         else {
-            Player tempPlayer = new Player("", brain.getTimesAsked());
-            if(highScores != null) {
-                for(int i = highScores.size() - 1; i >= 0; i--) {
-                    int compareInt = highScores.get(i).compareTo(tempPlayer);
-                }
+            final int SCORE = brain.getTimesAsked();
+
+            if(!highScores.isEmpty()) {
+                final int IS_VALID = highScores.get(highScores.size() - 1).compareTo(new Player("", SCORE));
+
             }
+
+            updateHighScore(tempPlayer);
+            System.out.println(highScores);
             displayPlayAgain();
+        }
+    }
+
+    public void updateHighScore(Player tempPlayer) {
+        final int HIGHSCORE_SIZE = (highScores.isEmpty())? 0: highScores.size() ;
+        if(HIGHSCORE_SIZE == 0) highScores.add(tempPlayer);
+
+        for(int i = 0; i < HIGHSCORE_SIZE; i++) {
+            switch( highScores.get(i).compareTo(tempPlayer) ) {
+                case -1: // tempPlayer comes after i
+                    if(i == 0) highScores.addLast(tempPlayer);
+                    if(i == highScores.size() - 1) highScores.add(1, tempPlayer);
+                    break;
+                case 0: // tempPlayer has the same high score as i
+                    if(i == 0) highScores.add(i + 1, tempPlayer);
+                    if(i == highScores.size() - 1) highScores.addLast(tempPlayer);
+                    break;
+                case 1: // tempPlayer comes before i
+                    if (i == highScores.size() - 1) highScores.addFirst(tempPlayer);
+                    if(i == highScores.size() - 1) highScores.addLast(tempPlayer);
+                    break;
+            }
         }
     }
 }
