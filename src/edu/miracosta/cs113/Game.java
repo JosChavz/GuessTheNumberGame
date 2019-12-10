@@ -1,7 +1,7 @@
 package edu.miracosta.cs113;
 
+import exceptions.BoxChoiceException;
 import model.AssistantJack;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -16,7 +16,9 @@ import java.util.Scanner;
 
 public class Game extends JPanel implements ActionListener {
 
+    /** PLAYER INNER CLASS */
     public static class Player implements Serializable, Comparable {
+        /** PLAYER VARIABLE */
         private String name;
         private int score;
 
@@ -37,7 +39,7 @@ public class Game extends JPanel implements ActionListener {
 
             // This object's score is greater than o's score.
             if( this.score > ((Player) o).score) return 1;
-            // This object's score is less than o's score.
+                // This object's score is less than o's score.
             else if( this.score < ((Player) o).score ) return -1;
 
             // Both scores are the same
@@ -45,6 +47,7 @@ public class Game extends JPanel implements ActionListener {
         }
     }
 
+    /** GAME VARIABLES */
     private AssistantJack brain;
     private JPanel comboBoxesWrapper;
     private JComboBox[] boxChoices;
@@ -55,6 +58,20 @@ public class Game extends JPanel implements ActionListener {
     private ArrayList<String> languageFile;
     private JPanel gameCover;
 
+    /** CONSTRUCTOR */
+    public Game(ArrayList<String> languageFile) {
+        // Setting size of the window
+        setSize(WIDTH, HEIGHT);
+
+        // Assigning the ArrayList global to the class
+        this.languageFile = languageFile;
+
+        newGame();
+
+        highScoreInitialization();
+    }
+
+    /** METHODS */
     private void newGame() {
         // Creates a whole new set of answers
         brain = new AssistantJack(3);
@@ -109,20 +126,15 @@ public class Game extends JPanel implements ActionListener {
         repaint();
     }
 
-    public Game(ArrayList<String> languageFile) {
-        // Setting size of the window
-        setSize(WIDTH, HEIGHT);
-
-        // Assigning the ArrayList global to the class
-        this.languageFile = languageFile;
-
-        newGame();
-
-        updateHighScore();
-    }
-
+    /**
+     * Takes in a number and outputs an ArrayList of String with elements from [0 - number]
+     * Where number is the input
+     * @param number The maximum number that will be added in the Array List
+     * @return An Array List of String which are integers converted to String
+     */
     private static ArrayList<String> numberArray(int number) {
-        ArrayList<String> stringArray = new ArrayList<String>(number);
+        ArrayList<String> stringArray = new ArrayList<>(number);
+        stringArray.add("");
 
         for(int i = 0; i < number; i++) {
             stringArray.add(String.valueOf(i + 1));
@@ -173,7 +185,7 @@ public class Game extends JPanel implements ActionListener {
         repaint();
     }
 
-    private void updateHighScore() {
+    private void highScoreInitialization() {
         // High score text
         JPanel highScorePanel = new JPanel(new GridBagLayout());
         GridBagConstraints editor = new GridBagConstraints();
@@ -227,15 +239,26 @@ public class Game extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Variables
+        int[] responses;
 
-        int tempFirstResponse = Integer.parseInt((String) boxChoices[0].getSelectedItem());
-        int tempSecondResponse = Integer.parseInt((String) boxChoices[1].getSelectedItem());
-        int tempThirdResponse = Integer.parseInt((String) boxChoices[2].getSelectedItem());
+        // Checks to see if input is valid
+        try {
+            responses = checkResponses(
+                    (String) boxChoices[0].getSelectedItem(),
+                    (String) boxChoices[1].getSelectedItem(),
+                    (String) boxChoices[2].getSelectedItem()
+            );
+        } catch (BoxChoiceException wrong) {
+            // prints to user that input is wrong and skips all next code
+            JOptionPane.showMessageDialog(null, wrong.getMessage());
+            return;
+        }
 
         int wrongAnswer = brain.checkAnswer(
-                tempFirstResponse,
-                tempSecondResponse,
-                tempThirdResponse
+                responses[0],
+                responses[1],
+                responses[2]
         );
 
         if(wrongAnswer != 0) {
@@ -250,8 +273,8 @@ public class Game extends JPanel implements ActionListener {
 
             }
 
-            updateHighScore(tempPlayer);
-            System.out.println(highScores);
+            //updateHighScore(tempPlayer);
+            //System.out.println(highScores);
             displayPlayAgain();
         }
     }
@@ -276,5 +299,11 @@ public class Game extends JPanel implements ActionListener {
                     break;
             }
         }
+    }
+
+    /** HELPING METHODS */
+    private static int[] checkResponses(String a, String b, String c) throws BoxChoiceException {
+        if(a.matches("^\\d+$") && b.matches("^\\d+$") && c.matches("^\\d+$")) return new int[]{Integer.parseInt(a), Integer.parseInt(b), Integer.parseInt(c)};
+        else throw new BoxChoiceException("Please choose a valid input");
     }
 }
