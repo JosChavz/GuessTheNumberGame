@@ -2,9 +2,11 @@ package edu.miracosta.cs113;
 
 import exceptions.BoxChoiceException;
 import model.AssistantJack;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +18,7 @@ import java.util.Scanner;
 
 public class Game extends JPanel implements ActionListener {
 
-    /** PLAYER INNER CLASS */
     public static class Player implements Serializable, Comparable {
-        /** PLAYER VARIABLE */
         private String name;
         private int score;
 
@@ -34,20 +34,11 @@ public class Game extends JPanel implements ActionListener {
 
         @Override
         public int compareTo(Object o) {
-            // In the case that o is not a Player
-            if( !(o instanceof Player) ) throw new ClassCastException();
 
-            // This object's score is greater than o's score.
-            if( this.score > ((Player) o).score) return 1;
-                // This object's score is less than o's score.
-            else if( this.score < ((Player) o).score ) return -1;
-
-            // Both scores are the same
             return 0;
         }
     }
 
-    /** GAME VARIABLES */
     private AssistantJack brain;
     private JPanel comboBoxesWrapper;
     private JComboBox[] boxChoices;
@@ -58,23 +49,10 @@ public class Game extends JPanel implements ActionListener {
     private ArrayList<String> languageFile;
     private JPanel gameCover;
 
-    /** CONSTRUCTOR */
-    public Game(ArrayList<String> languageFile) {
-        // Setting size of the window
-        setSize(WIDTH, HEIGHT);
-
-        // Assigning the ArrayList global to the class
-        this.languageFile = languageFile;
-
-        newGame();
-
-        highScoreInitialization();
-    }
-
-    /** METHODS */
     private void newGame() {
         // Creates a whole new set of answers
         brain = new AssistantJack(3);
+        System.out.println(brain.getCorrectTheory().toString());
         if(gameCover != null ) remove(gameCover);
 
         gameCover = new JPanel(new BorderLayout());
@@ -126,12 +104,18 @@ public class Game extends JPanel implements ActionListener {
         repaint();
     }
 
-    /**
-     * Takes in a number and outputs an ArrayList of String with elements from [0 - number]
-     * Where number is the input
-     * @param number The maximum number that will be added in the Array List
-     * @return An Array List of String which are integers converted to String
-     */
+    public Game(ArrayList<String> languageFile) {
+        // Setting size of the window
+        setSize(WIDTH, HEIGHT);
+
+        // Assigning the ArrayList global to the class
+        this.languageFile = languageFile;
+
+        newGame();
+
+        runHighScoreFile();
+    }
+
     private static ArrayList<String> numberArray(int number) {
         ArrayList<String> stringArray = new ArrayList<>(number);
         stringArray.add("");
@@ -153,6 +137,7 @@ public class Game extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent actionEvent) {
                 index = 0;
                 newGame();
+                updateHighScore();
             }
         });
         double buttonSize = playAgainButton.getPreferredSize().getHeight() + 20; // padding of 10 pixels
@@ -185,7 +170,8 @@ public class Game extends JPanel implements ActionListener {
         repaint();
     }
 
-    private void highScoreInitialization() {
+    // First run to print high score on screen
+    private void runHighScoreFile() {
         // High score text
         JPanel highScorePanel = new JPanel(new GridBagLayout());
         GridBagConstraints editor = new GridBagConstraints();
@@ -215,10 +201,11 @@ public class Game extends JPanel implements ActionListener {
             do {
                 // Assigns the next object in the file to tempPlayer
                 tempPlayer = (Player)fileReader.readObject();
+                System.out.println(tempPlayer);
                 // Checks to see if the tempPlayer is null
                 if(tempPlayer == null) continue;
                 // Adds in if it wasn't null
-                highScores.add(tempPlayer);
+                highScoreAdd(tempPlayer);
             }
             while( tempPlayer != null );
         }
@@ -235,6 +222,32 @@ public class Game extends JPanel implements ActionListener {
 
         // Adds high score panel to the screen
         gameCover.add(highScorePanel, BorderLayout.NORTH);
+    }
+
+    public void highScoreAdd(Player tempPlayer) {
+        if(highScores.size() == 0) {
+            highScores.add(tempPlayer);
+            return;
+        }
+
+        for(int i = 0; i < highScores.size(); i++) {
+            switch( highScores.get(i).compareTo(tempPlayer) ) {
+                case -1: // tempPlayer comes before i
+                    if(i == 0) highScores.addFirst(tempPlayer);
+
+                    break;
+                case 0: // tempPlayer has the same high score as i
+                    if(i == 0) highScores.add(i + 1, tempPlayer);
+                    break;
+                case 1: // tempPlayer comes after i
+                    if (i == highScores.size() - 1) highScores.addLast(tempPlayer);
+                    break;
+            }
+        }
+
+        // In case the ArrayList has a size of 4
+        if(highScores.size() > 3) highScores.removeLast();
+        printToFile(highScores);
     }
 
     @Override
@@ -266,38 +279,24 @@ public class Game extends JPanel implements ActionListener {
             updateBoxes();
         }
         else {
-            final int SCORE = brain.getTimesAsked();
-
-            if(!highScores.isEmpty()) {
-                final int IS_VALID = highScores.get(highScores.size() - 1).compareTo(new Player("", SCORE));
-
+            Player tempPlayer = new Player("", brain.getTimesAsked());
+            if(highScores.isEmpty()) {
+                String name = JOptionPane.showInputDialog("Please input your name");
+                tempPlayer.name = name; // Might be bad practice to do so
+                highScoreAdd(tempPlayer);
             }
-
-            //updateHighScore(tempPlayer);
-            //System.out.println(highScores);
+            else {
+                for(int i = highScores.size() - 1; i >= 0; i--) {
+                    int compareInt = highScores.get(i).compareTo(tempPlayer);
+                    if(compareInt <= 0) {
+                        String name = JOptionPane.showInputDialog("Please input your name");
+                        tempPlayer.name = name;
+                        highScoreAdd(tempPlayer);
+                        break;
+                    }
+                }
+            }
             displayPlayAgain();
-        }
-    }
-
-    public void updateHighScore(Player tempPlayer) {
-        final int HIGHSCORE_SIZE = (highScores.isEmpty())? 0: highScores.size() ;
-        if(HIGHSCORE_SIZE == 0) highScores.add(tempPlayer);
-
-        for(int i = 0; i < HIGHSCORE_SIZE; i++) {
-            switch( highScores.get(i).compareTo(tempPlayer) ) {
-                case -1: // tempPlayer comes after i
-                    if(i == 0) highScores.addLast(tempPlayer);
-                    if(i == highScores.size() - 1) highScores.add(1, tempPlayer);
-                    break;
-                case 0: // tempPlayer has the same high score as i
-                    if(i == 0) highScores.add(i + 1, tempPlayer);
-                    if(i == highScores.size() - 1) highScores.addLast(tempPlayer);
-                    break;
-                case 1: // tempPlayer comes before i
-                    if (i == highScores.size() - 1) highScores.addFirst(tempPlayer);
-                    if(i == highScores.size() - 1) highScores.addLast(tempPlayer);
-                    break;
-            }
         }
     }
 
@@ -306,4 +305,47 @@ public class Game extends JPanel implements ActionListener {
         if(a.matches("^\\d+$") && b.matches("^\\d+$") && c.matches("^\\d+$")) return new int[]{Integer.parseInt(a), Integer.parseInt(b), Integer.parseInt(c)};
         else throw new BoxChoiceException("Please choose a valid input");
     }
+
+    public void updateHighScore() {
+        // High score text
+        JPanel highScorePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints editor = new GridBagConstraints();
+        editor.gridx = 1;
+
+        JLabel highScoreText = new JLabel(languageFile.get(0));
+        highScorePanel.add(highScoreText, editor);
+
+        // Editing GridBag to fit current high score needs
+        editor.insets = new Insets(5, 16, 5, 16);
+        editor.gridy = 1;
+
+        for(int i = 0; i < 3; i++) {
+            JLabel temp = new JLabel((i + 1) + ": " +
+                    ((highScores != null && i < highScores.size())? highScores.get(i).toString() : "[Empty]") );
+            editor.gridx = i;
+            highScorePanel.add(temp, editor);
+        }
+
+        // Adds high score panel to the screen
+        gameCover.add(highScorePanel, BorderLayout.NORTH);
+
+        repaint();
+        validate();
+    }
+
+    private static void printToFile(LinkedList<Player> data) {
+        try {
+            FileOutputStream file = new FileOutputStream("highscores.dat");
+            ObjectOutputStream fileWriter = new ObjectOutputStream(file);
+
+            for(Player temp : data) {
+                fileWriter.writeObject(temp);
+            }
+        }
+        catch(Exception e) {
+            System.out.println("Error!");
+            System.exit(0);
+        }
+    }
+
 }

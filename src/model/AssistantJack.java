@@ -18,6 +18,10 @@ public class AssistantJack {
     private int timesAsked;
     private Theory correctTheory;
 
+    public Theory getCorrectTheory() {
+        return this.correctTheory;
+    }
+
     /**
      * The default constructor but will not be called from outside.
      */
