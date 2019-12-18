@@ -3,10 +3,7 @@ package edu.miracosta.cs113;
 import exceptions.BoxChoiceException;
 import model.AssistantJack;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,6 +45,8 @@ public class Game extends JPanel implements ActionListener {
     private int index = 0;
     private ArrayList<String> languageFile;
     private JPanel gameCover;
+    private JMenuBar menuBar;
+    private JMenu howTo, reset, about;
 
     private void newGame() {
         // Creates a whole new set of answers
