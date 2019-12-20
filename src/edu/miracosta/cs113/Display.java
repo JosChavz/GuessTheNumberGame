@@ -25,7 +25,7 @@ public class Display extends JFrame implements ActionListener {
             System.exit(0);
         }*/
 
-        Display window = new Display();
+        Display window = new Display("Guess the Number", 400, 600);
 
         // Change the Icon for the program
         try {
@@ -39,11 +39,15 @@ public class Display extends JFrame implements ActionListener {
     }
 
     public Display() {
-        super("Guess the Number");
+
+    }
+
+    public Display(String message, int w, int h) {
+        super(message);
 
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 450);
+        setSize(w, h);
 
         sceneHandler = new CardLayout(40, 30);
 
@@ -52,24 +56,7 @@ public class Display extends JFrame implements ActionListener {
 
         scenes.add(startingMenu);
 
-        // Initializing the menu bar
-        JMenuBar menuBar = new JMenuBar();
-
-        // Initializing the menu
-        JMenuItem howTo = new JMenuItem("How To Play"); // Will differ due to language
-        JMenuItem reset = new JMenuItem("Reset Game");
-        JMenuItem about = new JMenuItem("About Game");
-
-        // Adding actionListener
-        howTo.addActionListener(this);
-        reset.addActionListener(this);
-        about.addActionListener(this);
-
-        menuBar.add(howTo);
-        menuBar.add(reset);
-        menuBar.add(about);
-
-        this.setJMenuBar(menuBar);
+        MenuBar tester = new MenuBar(this);
     }
 
     public static void addSlide(JPanel comp) { scenes.add(comp); }

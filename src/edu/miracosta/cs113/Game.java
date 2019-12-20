@@ -45,8 +45,7 @@ public class Game extends JPanel implements ActionListener {
     private int index = 0;
     private ArrayList<String> languageFile;
     private JPanel gameCover;
-    private JMenuBar menuBar;
-    private JMenu howTo, reset, about;
+    private MenuBar bar;
 
     private void newGame() {
         // Creates a whole new set of answers
@@ -104,6 +103,8 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public Game(ArrayList<String> languageFile) {
+        bar = new MenuBar(languageFile);
+
         // Setting size of the window
         setSize(WIDTH, HEIGHT);
 
