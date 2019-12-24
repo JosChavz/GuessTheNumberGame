@@ -9,10 +9,7 @@ public class MenuBar implements ActionListener {
     static JMenuBar menuBar;
     static JMenuItem howTo, reset, about;
     static JFrame reference;
-
-    public MenuBar(ArrayList<String> language) {
-        // Nothing for now
-    }
+    static ArrayList<String> language;
 
     public MenuBar(JFrame reference) {
         // Initializing the menu bar
@@ -38,6 +35,16 @@ public class MenuBar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        JMenuItem source = (JMenuItem) actionEvent.getSource();
+        String text = source.getText().toLowerCase();
 
+        if(text.equals("reset game")) Display.resetGame();
+        else if(text.equals("how to play")) howToDisplay();
+        else  JOptionPane.showMessageDialog(null, "Created by Jose M Chavez. Finally.");
+    }
+
+    private static void howToDisplay() {
+        String string = "This is how to play! Bruh.";
+        JOptionPane.showMessageDialog(null, string);
     }
 }

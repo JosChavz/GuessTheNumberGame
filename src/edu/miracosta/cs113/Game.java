@@ -15,34 +15,12 @@ import java.util.Scanner;
 
 public class Game extends JPanel implements ActionListener {
 
-    public static class Player implements Serializable, Comparable {
-        private String name;
-        private int score;
-
-        Player(String name, int score) {
-            this.name = name;
-            this.score = score;
-        }
-
-        @Override
-        public String toString() {
-            return this.name + " - " + this.score;
-        }
-
-        @Override
-        public int compareTo(Object o) {
-
-            return 0;
-        }
-    }
-
     private AssistantJack brain;
     private JPanel comboBoxesWrapper;
     private JComboBox[] boxChoices;
     private ArrayList<String>[] currentArrays;
     private JPanel submit;
-    private LinkedList<Player> highScores;
-    private int index = 0;
+    private ArrayList<Player> highScores;
     private ArrayList<String> languageFile;
     private JPanel gameCover;
     private MenuBar bar;
@@ -103,8 +81,6 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public Game(ArrayList<String> languageFile) {
-        bar = new MenuBar(languageFile);
-
         // Setting size of the window
         setSize(WIDTH, HEIGHT);
 
@@ -116,17 +92,6 @@ public class Game extends JPanel implements ActionListener {
         runHighScoreFile();
     }
 
-    private static ArrayList<String> numberArray(int number) {
-        ArrayList<String> stringArray = new ArrayList<>(number);
-        stringArray.add("");
-
-        for(int i = 0; i < number; i++) {
-            stringArray.add(String.valueOf(i + 1));
-        }
-
-        return stringArray;
-    }
-
     private void displayPlayAgain() {
         // Removes button container from JPanel
         gameCover.remove(submit);
@@ -135,7 +100,6 @@ public class Game extends JPanel implements ActionListener {
         playAgainButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                index = 0;
                 newGame();
                 updateHighScore();
             }
@@ -195,19 +159,11 @@ public class Game extends JPanel implements ActionListener {
             ObjectInputStream fileReader = new ObjectInputStream(file);
 
             // Creates a new LinkedList, removing everything before
-            highScores = new LinkedList<>();
+            highScores = new ArrayList<>();
             // A temp player that will be read in the do-while list
-            Player tempPlayer;
-            do {
-                // Assigns the next object in the file to tempPlayer
-                tempPlayer = (Player)fileReader.readObject();
-                System.out.println(tempPlayer);
-                // Checks to see if the tempPlayer is null
-                if(tempPlayer == null) continue;
-                // Adds in if it wasn't null
-                highScoreAdd(tempPlayer);
-            }
-            while( tempPlayer != null );
+            highScores = (ArrayList<Player>) fileReader.readObject();
+
+            fileReader.close();
         }
         catch (Exception ignored) { }
         finally {
@@ -225,28 +181,15 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public void highScoreAdd(Player tempPlayer) {
-        if(highScores.size() == 0) {
-            highScores.add(tempPlayer);
-            return;
-        }
+        highScores.add(tempPlayer);
 
-        for(int i = 0; i < highScores.size(); i++) {
-            switch( highScores.get(i).compareTo(tempPlayer) ) {
-                case -1: // tempPlayer comes before i
-                    if(i == 0) highScores.addFirst(tempPlayer);
+        if(highScores.size() == 0) return;
 
-                    break;
-                case 0: // tempPlayer has the same high score as i
-                    if(i == 0) highScores.add(i + 1, tempPlayer);
-                    break;
-                case 1: // tempPlayer comes after i
-                    if (i == highScores.size() - 1) highScores.addLast(tempPlayer);
-                    break;
-            }
-        }
+        BubbleSort.sort(this.highScores);
 
+        System.out.println(highScores.size());
         // In case the ArrayList has a size of 4
-        if(highScores.size() > 3) highScores.removeLast();
+        if(highScores.size() > 3) highScores.remove(highScores.size() - 1);
         printToFile(highScores);
     }
 
@@ -282,15 +225,15 @@ public class Game extends JPanel implements ActionListener {
             Player tempPlayer = new Player("", brain.getTimesAsked());
             if(highScores.isEmpty()) {
                 String name = JOptionPane.showInputDialog("Please input your name");
-                tempPlayer.name = name; // Might be bad practice to do so
+                tempPlayer.setName(name); // Might be bad practice to do so
                 highScoreAdd(tempPlayer);
             }
             else {
                 for(int i = highScores.size() - 1; i >= 0; i--) {
                     int compareInt = highScores.get(i).compareTo(tempPlayer);
-                    if(compareInt <= 0) {
+                    if(compareInt >= 0) {
                         String name = JOptionPane.showInputDialog("Please input your name");
-                        tempPlayer.name = name;
+                        tempPlayer.setName(name);
                         highScoreAdd(tempPlayer);
                         break;
                     }
@@ -333,14 +276,27 @@ public class Game extends JPanel implements ActionListener {
         validate();
     }
 
-    private static void printToFile(LinkedList<Player> data) {
+    private static ArrayList<String> numberArray(int number) {
+        ArrayList<String> stringArray = new ArrayList<>(number);
+        stringArray.add("");
+
+        for(int i = 0; i < number; i++) {
+            stringArray.add(String.valueOf(i + 1));
+        }
+
+        return stringArray;
+    }
+
+    private static void printToFile(ArrayList<Player> data) {
+        System.out.println(data);
         try {
             FileOutputStream file = new FileOutputStream("highscores.dat");
             ObjectOutputStream fileWriter = new ObjectOutputStream(file);
 
-            for(Player temp : data) {
-                fileWriter.writeObject(temp);
-            }
+            fileWriter.writeObject(data);
+
+            fileWriter.flush();
+            fileWriter.close();
         }
         catch(Exception e) {
             System.out.println("Error!");

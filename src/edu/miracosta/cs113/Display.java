@@ -8,11 +8,12 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class Display extends JFrame implements ActionListener {
+public class Display extends JFrame {
 
     private static CardLayout sceneHandler;
     private static Container scenes;
     static JPanel startingMenu = new StartingMenu();
+    private static Display window;
 
     public static void main(String[] args) {
         /** FOR TESTING PURPOSES */
@@ -24,22 +25,19 @@ public class Display extends JFrame implements ActionListener {
             System.out.println("Error!");
             System.exit(0);
         }*/
+       newWindow();
+    }
 
-        Display window = new Display("Guess the Number", 400, 600);
+    private static void newWindow() {
+        window = new Display("Guess the Number", 400, 600);
 
-        // Change the Icon for the program
         try {
             window.setIconImage(ImageIO.read(new File("src/edu/miracosta/cs113/logo.png")));
         } catch(Exception e) {
             System.out.println(e.getMessage());
             System.exit(0);
         }
-
         window.setVisible(true);
-    }
-
-    public Display() {
-
     }
 
     public Display(String message, int w, int h) {
@@ -63,26 +61,17 @@ public class Display extends JFrame implements ActionListener {
 
     public static void nextSlide() { sceneHandler.next(scenes); }
 
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        int type = actionEvent.getActionCommand().hashCode();
-        if(type < 0) type = Math.abs(type);
-
-        switch (type) {
-            case 822225463:
-                JOptionPane.showMessageDialog(null, "Guess the right combination and memorize your every move!");
-                break;
-            case 257517667:
-                resetGame();
-                break;
-            case 930440987:
-                System.out.println('c');
-                break;
+    public static void resetGame() {
+        window.setVisible(false);
+        newWindow();
+        try {
+            ObjectOutputStream fileWriter = new ObjectOutputStream( new FileOutputStream("highscores.dat") );
+            fileWriter.reset();
+            fileWriter.close();
         }
-    }
-
-    // Resets the Game
-    private void resetGame() {
-
+        catch(Exception e) {
+            System.out.println("Error!");
+            System.exit(0);
+        }
     }
 }

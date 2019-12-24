@@ -14,7 +14,6 @@ public class StartingMenu extends JPanel implements ActionListener {
     public static final int HEIGHT = 800;
 
     public StartingMenu() {
-
         setSize(WIDTH, HEIGHT);
         setLayout(new BorderLayout());
 
@@ -95,6 +94,7 @@ public class StartingMenu extends JPanel implements ActionListener {
         }
 
         // Creates a new game with the right language
+        MenuBar.language = languageData;
         Game game = new Game(languageData);
         Display.addSlide(game);
 
@@ -103,8 +103,6 @@ public class StartingMenu extends JPanel implements ActionListener {
     }
 
     public static String encode(String s) {
-        s = new String(s.getBytes(), StandardCharsets.UTF_8);
-
-        return s;
+        return new String(s.getBytes(), StandardCharsets.UTF_8);
     }
 }
