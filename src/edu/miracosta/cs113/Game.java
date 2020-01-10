@@ -15,6 +15,9 @@ import java.util.Scanner;
 
 public class Game extends JPanel implements ActionListener {
 
+    /** The amount of highscore names there could be on board **/
+    final int HIGHSCORE_MAX = 3;
+
     private AssistantJack brain;
     private JPanel comboBoxesWrapper;
     private JComboBox[] boxChoices;
@@ -81,6 +84,7 @@ public class Game extends JPanel implements ActionListener {
     }
 
     public Game(ArrayList<String> languageFile) {
+        System.out.println(languageFile.size());
         // Setting size of the window
         setSize(WIDTH, HEIGHT);
 
@@ -167,7 +171,7 @@ public class Game extends JPanel implements ActionListener {
         }
         catch (Exception ignored) { }
         finally {
-            for(int i = 0; i < 3; i++) { // Doesn't want to add in to the actual Frame
+            for(int i = 0; i < HIGHSCORE_MAX; i++) { // Doesn't want to add in to the actual Frame
                 JLabel temp = new JLabel((i + 1) + ": " +
                         ((highScores != null && i < highScores.size())? highScores.get(i).toString() : "[Empty]") );
                 editor.gridx = i;
@@ -187,9 +191,8 @@ public class Game extends JPanel implements ActionListener {
 
         BubbleSort.sort(this.highScores);
 
-        System.out.println(highScores.size());
         // In case the ArrayList has a size of 4
-        if(highScores.size() > 3) highScores.remove(highScores.size() - 1);
+        if(highScores.size() > HIGHSCORE_MAX) highScores.remove(highScores.size() - 1);
         printToFile(highScores);
     }
 
@@ -223,12 +226,13 @@ public class Game extends JPanel implements ActionListener {
         }
         else {
             Player tempPlayer = new Player("", brain.getTimesAsked());
-            if(highScores.isEmpty()) {
+            if(highScores.isEmpty() || highScores.size() <= HIGHSCORE_MAX) {
                 String name = JOptionPane.showInputDialog("Please input your name");
                 tempPlayer.setName(name); // Might be bad practice to do so
                 highScoreAdd(tempPlayer);
             }
             else {
+                System.out.println(highScores.size());
                 for(int i = highScores.size() - 1; i >= 0; i--) {
                     int compareInt = highScores.get(i).compareTo(tempPlayer);
                     if(compareInt >= 0) {
@@ -262,7 +266,7 @@ public class Game extends JPanel implements ActionListener {
         editor.insets = new Insets(5, 16, 5, 16);
         editor.gridy = 1;
 
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < HIGHSCORE_MAX; i++) {
             JLabel temp = new JLabel((i + 1) + ": " +
                     ((highScores != null && i < highScores.size())? highScores.get(i).toString() : "[Empty]") );
             editor.gridx = i;

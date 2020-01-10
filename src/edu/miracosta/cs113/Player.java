@@ -29,7 +29,7 @@ public class Player implements Serializable, Comparable {
 
         // This object's score is greater than o's score.
         if( this.score > ((Player) o).score) return 1;
-            // This object's score is less than o's score.
+        // This object's score is less than o's score.
         else if( this.score < ((Player) o).score ) return -1;
 
         // Both scores are the same

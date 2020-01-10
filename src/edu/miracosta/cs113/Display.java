@@ -3,8 +3,6 @@ package edu.miracosta.cs113;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -16,16 +14,8 @@ public class Display extends JFrame {
     private static Display window;
 
     public static void main(String[] args) {
-        /** FOR TESTING PURPOSES */
-        /*try {
-            FileOutputStream file = new FileOutputStream("highscores.dat");
-            ObjectOutputStream fileWriter = new ObjectOutputStream(file);
-        }
-        catch(Exception e) {
-            System.out.println("Error!");
-            System.exit(0);
-        }*/
        newWindow();
+       writeOnFile();
     }
 
     private static void newWindow() {
@@ -71,6 +61,32 @@ public class Display extends JFrame {
         }
         catch(Exception e) {
             System.out.println("Error!");
+            System.exit(0);
+        }
+    }
+
+    private static void writeOnFile() {
+        try {
+            BufferedWriter fileWriter = new BufferedWriter(
+                    new FileWriter("english.dat", true)
+            );
+
+            /*fileWriter.write("High Scores:");
+            fileWriter.newLine();
+            fileWriter.write("Check");
+            fileWriter.newLine();
+            fileWriter.write("New Game");*/
+            fileWriter.newLine();
+            fileWriter.write(" Primero, escoje 3 numeros y recuerda los.\nDespues, preciona el boton llamado \"Comprobar\"" +
+                    "TIP: Las cajas se van a quedar en blanco, pero el numero  incorrecto se va a borrar.");
+            /*fileWriter.write("First, choose 3 numbers and memorize them.\nSecondly, hit the \"Check\" button." +
+                    "\nTIP: The boxes will become blank and the wrong number will disappear.");*/
+            fileWriter.newLine();
+            fileWriter.write("Este \"juego\" fue creado por Jose Manuel Chavez. El \"juego\" fue creado por diversion.");
+            /*fileWriter.write("This \"game\" was created by Jose Manuel Chavez for fun.");*/
+
+            fileWriter.close();
+        } catch(Exception e) {
             System.exit(0);
         }
     }

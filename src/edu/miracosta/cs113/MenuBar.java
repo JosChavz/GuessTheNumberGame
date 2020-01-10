@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class MenuBar implements ActionListener {
+    private final String HOW_TO_PLAY_DEFAULT = "First, choose 3 numbers and memorize them.\nSecondly, hit the \"Check\" button." +
+            "\nTIP: The boxes will become blank and the wrong number will disappear.";
+    private final String CREATED_BY_DEFAULT = "This \"game\" was created by Jose Manuel Chavez for fun.";
+
     static JMenuBar menuBar;
     static JMenuItem howTo, reset, about;
     static JFrame reference;
@@ -39,12 +43,11 @@ public class MenuBar implements ActionListener {
         String text = source.getText().toLowerCase();
 
         if(text.equals("reset game")) Display.resetGame();
-        else if(text.equals("how to play")) howToDisplay();
-        else  JOptionPane.showMessageDialog(null, "Created by Jose M Chavez. Finally.");
+        else if(text.equals("how to play")) writeMessage( ( language == null ) ? HOW_TO_PLAY_DEFAULT : language.get(5) );
+        else  writeMessage( ( language == null ) ? CREATED_BY_DEFAULT : language.get(6) );
     }
 
-    private static void howToDisplay() {
-        String string = "This is how to play! Bruh.";
-        JOptionPane.showMessageDialog(null, string);
+    private void writeMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
     }
 }

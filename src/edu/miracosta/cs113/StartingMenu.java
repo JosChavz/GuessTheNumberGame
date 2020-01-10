@@ -84,6 +84,7 @@ public class StartingMenu extends JPanel implements ActionListener {
             String str;
 
             while( ( str = inputStream.readLine() ) != null ) {
+                System.out.println(str);
                 languageData.add(str);
             }
 
