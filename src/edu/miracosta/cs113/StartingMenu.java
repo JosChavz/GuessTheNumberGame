@@ -32,7 +32,7 @@ public class StartingMenu extends JPanel implements ActionListener {
         JLabel languageText = new JLabel("Please choose your language: ");
         JButton english = new JButton("English");
         JButton spanish = new JButton("Espa\u00f1ol");
-        JButton japanese = new JButton(encode("日本語"));
+        JButton japanese = new JButton("\u65e5\u672c\u8a9e");
 
         // Assigning their actionPerformed after click
         english.addActionListener(this);
@@ -48,7 +48,7 @@ public class StartingMenu extends JPanel implements ActionListener {
         alignment.gridy = 3;
         languageWrapper.add(spanish, alignment);
         alignment.gridy = 4;
-        //languageWrapper.add(japanese, alignment);
+        languageWrapper.add(japanese, alignment);
 
         /** Adding all elements to the screen */
         add(welcomeText, BorderLayout.NORTH);
@@ -70,7 +70,7 @@ public class StartingMenu extends JPanel implements ActionListener {
 
             if (encodedString.equals(encode("English"))) languageFile = "english.dat";
             else if (encodedString.equals("Espa\u00f1ol")) languageFile = "spanish.dat";
-            else if (encodedString.equals(encode("日本語"))) languageFile = "japanese.dat";
+            else if (encodedString.equals("\u65e5\u672c\u8a9e")) languageFile = "japanese.dat";
 
             BufferedReader inputStream = new BufferedReader(
                     new InputStreamReader(
@@ -82,7 +82,6 @@ public class StartingMenu extends JPanel implements ActionListener {
             while( ( str = inputStream.readLine() ) != null ) {
                 languageData.add(str);
             }
-
             inputStream.close();
         } catch(IOException e) {
             System.out.println("Something went wrong...");

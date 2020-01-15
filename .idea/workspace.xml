@@ -6,11 +6,33 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b51d9f5f-371e-4836-a36c-e1a3241ce85a" name="Default Changelist" comment="" />
+    <list default="true" id="b51d9f5f-371e-4836-a36c-e1a3241ce85a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Guess_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Guess_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/english.dat" beforeDir="false" afterPath="$PROJECT_DIR$/english.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/highscores.dat" beforeDir="false" afterPath="$PROJECT_DIR$/highscores.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/japanese.dat" beforeDir="false" afterPath="$PROJECT_DIR$/japanese.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Guess_jar/Guess.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Guess_jar/Guess.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spanish.dat" beforeDir="false" afterPath="$PROJECT_DIR$/spanish.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/miracosta/cs113/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/miracosta/cs113/Display.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/miracosta/cs113/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/miracosta/cs113/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/miracosta/cs113/MenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/miracosta/cs113/MenuBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/miracosta/cs113/StartingMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/miracosta/cs113/StartingMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/Guess.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/miracosta/cs113/Display.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/miracosta/cs113/Display.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/miracosta/cs113/MenuBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/miracosta/cs113/MenuBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/edu/miracosta/cs113/StartingMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/edu/miracosta/cs113/StartingMenu.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1WDxZx6AEsgqEK8ZETu9si09vRf" />
   <component name="ProjectViewState">
@@ -19,14 +41,17 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="Application.Display">
+  <component name="RunManager" selected="Application.JAR">
     <configuration name="Display" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="edu.miracosta.cs113.Display" />
       <module name="Guess" />
@@ -40,9 +65,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="JAR" type="Application" factoryName="Application">
+    <configuration name="JAR" type="Application" factoryName="Application" temporary="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="edu.miracosta.cs113.Display" />
-      <module name="Guess" />
+      <module name="GuessTheNumberGame" />
       <option name="PROGRAM_PARAMETERS" value="--help" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -55,6 +82,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.JAR" />
         <item itemvalue="Application.Display" />
       </list>
     </recent_temporary>
@@ -82,6 +110,8 @@
       <option name="presentableId" value="Default" />
       <updated>1578698025141</updated>
       <workItem from="1578698028342" duration="3529000" />
+      <workItem from="1578945362272" duration="5398000" />
+      <workItem from="1579121465154" duration="4767000" />
     </task>
     <servers />
   </component>
@@ -89,37 +119,41 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="677" y="169" key="#JAR" timestamp="1578945534353">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="677" y="169" key="#JAR/0.0.1920.1040@0.0.1920.1040" timestamp="1578945534353" />
     <state x="414" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578698912933">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="176" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1578698912933" />
-    <state x="689" y="305" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1578699368723">
+    <state x="689" y="305" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1579130153386">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="689" y="305" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1578699368723" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1578698545127">
+    <state x="689" y="305" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1579130153386" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1579130157105">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1578698545127" />
-    <state width="1877" height="278" key="GridCell.Tab.0.bottom" timestamp="1578701560199">
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1579130157105" />
+    <state width="1860" height="278" key="GridCell.Tab.0.bottom" timestamp="1579130303355">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1578701560199" />
-    <state width="1877" height="278" key="GridCell.Tab.0.center" timestamp="1578701560199">
+    <state width="1860" height="278" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1579130303354" />
+    <state width="1860" height="278" key="GridCell.Tab.0.center" timestamp="1579130303354">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1578701560199" />
-    <state width="1877" height="278" key="GridCell.Tab.0.left" timestamp="1578701560199">
+    <state width="1860" height="278" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1579130303354" />
+    <state width="1860" height="278" key="GridCell.Tab.0.left" timestamp="1579130303354">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1578701560199" />
-    <state width="1877" height="278" key="GridCell.Tab.0.right" timestamp="1578701560199">
+    <state width="1860" height="278" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1579130303354" />
+    <state width="1860" height="278" key="GridCell.Tab.0.right" timestamp="1579130303354">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="278" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1578701560199" />
-    <state x="440" y="95" key="SettingsEditor" timestamp="1578699379574">
+    <state width="1860" height="278" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1579130303354" />
+    <state x="440" y="95" key="SettingsEditor" timestamp="1579130179484">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="95" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1578699379574" />
+    <state x="440" y="95" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1579130179484" />
   </component>
 </project>

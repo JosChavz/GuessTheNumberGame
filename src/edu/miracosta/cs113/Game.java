@@ -205,7 +205,7 @@ public class Game extends JPanel implements ActionListener {
             responses = checkResponses(
                     (String) boxChoices[0].getSelectedItem(),
                     (String) boxChoices[1].getSelectedItem(),
-                    (String) boxChoices[2].getSelectedItem()
+                    (String) boxChoices[2].getSelectedItem(), languageFile
             );
         } catch (BoxChoiceException wrong) {
             // prints to user that input is wrong and skips all next code
@@ -226,7 +226,7 @@ public class Game extends JPanel implements ActionListener {
         else {
             Player tempPlayer = new Player("", brain.getTimesAsked());
             if(highScores.isEmpty() || highScores.size() <= HIGHSCORE_MAX) {
-                String name = JOptionPane.showInputDialog("Please input your name");
+                String name = JOptionPane.showInputDialog(languageFile.get(9));
                 tempPlayer.setName(name); // Might be bad practice to do so
                 highScoreAdd(tempPlayer);
             }
@@ -234,7 +234,7 @@ public class Game extends JPanel implements ActionListener {
                 for(int i = highScores.size() - 1; i >= 0; i--) {
                     int compareInt = highScores.get(i).compareTo(tempPlayer);
                     if(compareInt >= 0) {
-                        String name = JOptionPane.showInputDialog("Please input your name");
+                        String name = JOptionPane.showInputDialog(languageFile.get(9));
                         tempPlayer.setName(name);
                         highScoreAdd(tempPlayer);
                         break;
@@ -246,9 +246,9 @@ public class Game extends JPanel implements ActionListener {
     }
 
     /** HELPING METHODS */
-    private static int[] checkResponses(String a, String b, String c) throws BoxChoiceException {
+    private static int[] checkResponses(String a, String b, String c, ArrayList<String> languageFile) throws BoxChoiceException {
         if(a.matches("^\\d+$") && b.matches("^\\d+$") && c.matches("^\\d+$")) return new int[]{Integer.parseInt(a), Integer.parseInt(b), Integer.parseInt(c)};
-        else throw new BoxChoiceException("Please choose a valid input");
+        else throw new BoxChoiceException(languageFile.get(8));
     }
 
     public void updateHighScore() {

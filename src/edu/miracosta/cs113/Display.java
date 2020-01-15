@@ -62,30 +62,19 @@ public class Display extends JFrame {
             System.out.println("Error!");
             System.exit(0);
         }
+        MenuBar.language = null;
     }
 
     private static void writeOnFile() {
         try {
             BufferedWriter fileWriter = new BufferedWriter(
-                    new FileWriter("japanese.dat", false)
+                    new FileWriter("spanish.dat", true)
             );
 
-            fileWriter.write("\u9ad8\u5f97\u70b9");
             fileWriter.newLine();
-            fileWriter.write("Check");
+            fileWriter.write("Escoje 3 n\u00fameros por favor.");
             fileWriter.newLine();
-            fileWriter.write("\u65b0\u3057\u3044\u30b2\u30fc\u30e0");
-            fileWriter.newLine();
-            fileWriter.write("First, choose 3 numbers and memorize them.#Secondly, hit the \"Check\" button." +
-                    "#TIP: The boxes will become blank and the wrong number will disappear.");
-            fileWriter.newLine();
-            fileWriter.write("This \"game\" was created by Jose Manuel Chavez for fun.");
-            fileWriter.newLine();
-            fileWriter.write("How to Play");
-            fileWriter.newLine();
-            fileWriter.write("Reset Game");
-            fileWriter.newLine();
-            fileWriter.write("About Game");
+            fileWriter.write("Escribe tu nombre");
 
             fileWriter.close();
         } catch(Exception e) {

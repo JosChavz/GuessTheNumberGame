@@ -38,9 +38,9 @@ public class MenuBar implements ActionListener {
         menuBar.add(reset);
         menuBar.add(about);
 
-        reference.setJMenuBar(menuBar);
-
         this.reference = reference;
+
+        reference.setJMenuBar(menuBar);
     }
 
     public static void refreshBar(ArrayList<String> language) {
@@ -55,9 +55,18 @@ public class MenuBar implements ActionListener {
         JMenuItem source = (JMenuItem) actionEvent.getSource();
         String text = source.getText().toLowerCase();
 
-        if(text.equals("reset game")) Display.resetGame();
-        else if(text.equals("how to play")) writeMessage( ( language == null ) ? HOW_TO_PLAY_DEFAULT : language.get(3).replaceAll("#", "\n") );
-        else  writeMessage( ( language == null ) ? CREATED_BY_DEFAULT : language.get(4) );
+        // How to Play
+        if( text.equals(TEXT_1_DEFAULT.toLowerCase()) ||
+                ((language != null) && text.equals( language.get(5).toLowerCase() )) )
+            writeMessage( ( language == null ) ? HOW_TO_PLAY_DEFAULT : language.get(3).replaceAll("#", "\n") );
+        // Reset Game
+        else if( text.equals(TEXT_2_DEFAULT.toLowerCase()) ||
+                ((language != null) && text.equals( language.get(6).toLowerCase() )) )
+            Display.resetGame();
+        // About Game
+        else if( text.equals(TEXT_3_DEFAULT.toLowerCase()) ||
+                ((language != null) && text.equals( language.get(7).toLowerCase() )) )
+            writeMessage( ( language == null ) ? CREATED_BY_DEFAULT : language.get(4) );
     }
 
     private void writeMessage(String message) {
